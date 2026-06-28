@@ -71,7 +71,7 @@ tool you trust.
 Requirements: JDK 17, Android SDK 34, Kotlin 2.1.
 
 ```bash
-git clone https://github.com/<your-username>/Chipstrap.git
+git clone https://github.com/TheStrongestOfTomorrow/Chipstrap.git
 cd Chipstrap
 ./gradlew assembleDebug
 # APK: app/build/outputs/apk/debug/app-debug.apk
