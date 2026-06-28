@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Chevstrap"
+rootProject.name = "Chipstrap"
 include(":app")

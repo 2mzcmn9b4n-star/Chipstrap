@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Chipstrap brand palette: chip-green / dark / accent -->
+    <color name="chip_primary">#00C853</color>
+    <color name="chip_primary_dark">#009624</color>
+    <color name="chip_on_primary">#001C13</color>
+    <color name="chip_secondary">#FFC107</color>
+    <color name="chip_background">#0E1417</color>
+    <color name="chip_surface">#171E22</color>
+    <color name="chip_surface_variant">#1F272C</color>
+    <color name="chip_on_background">#E7EAEC</color>
+    <color name="chip_on_surface">#E7EAEC</color>
+    <color name="chip_on_surface_variant">#9CA4AB</color>
+    <color name="chip_error">#FF5252</color>
+    <color name="chip_outline">#2A3338</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+</resources>

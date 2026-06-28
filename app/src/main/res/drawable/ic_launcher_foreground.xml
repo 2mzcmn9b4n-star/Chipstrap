@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Stylized chip / circuit + play triangle = Chipstrap -->
+    <path android:fillColor="@color/chip_on_primary"
+        android:pathData="M44,32 L76,54 L44,76 Z"/>
+    <path android:strokeColor="@color/chip_on_primary"
+        android:strokeWidth="3"
+        android:pathData="M30,30 L30,78 M78,30 L78,78 M30,30 L78,30 M30,78 L78,78"/>
+    <path android:strokeColor="@color/chip_on_primary"
+        android:strokeWidth="2"
+        android:pathData="M22,40 L30,40 M22,54 L30,54 M22,68 L30,68 M78,40 L86,40 M78,54 L86,54 M78,68 L86,68"/>
+</vector>

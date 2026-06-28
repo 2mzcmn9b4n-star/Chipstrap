@@ -1,0 +1,173 @@
+<resources>
+    <string name="app_name">Chipstrap</string>
+    <string name="app_tagline">Fast, native, optimized Roblox launcher for Android</string>
+
+    <!-- Nav -->
+    <string name="nav_home">Home</string>
+    <string name="nav_fflags">FFlags</string>
+    <string name="nav_optimizations">Optimizations</string>
+    <string name="nav_integrations">Integrations</string>
+    <string name="nav_server_info">Server</string>
+    <string name="nav_about">About</string>
+
+    <!-- Home -->
+    <string name="home_launch_roblox">Launch Roblox</string>
+    <string name="home_apply_and_launch">Apply &amp; Launch</string>
+    <string name="home_checking_status">Checking Roblox install…</string>
+    <string name="home_roblox_installed">Roblox installed</string>
+    <string name="home_roblox_not_installed">Roblox not installed</string>
+    <string name="home_active_preset">Active preset</string>
+    <string name="home_active_preset_none">None</string>
+    <string name="home_profile_card_title">Application strategy</string>
+    <string name="home_profile_card_subtitle">How Chipstrap injects FFlags into Roblox</string>
+    <string name="home_fflags_count">FFlags configured: %1$d</string>
+    <string name="home_last_launch">Last launch: %1$s</string>
+    <string name="home_never_launched">Never launched</string>
+
+    <!-- Strategies -->
+    <string name="strategy_shizuku">Shizuku (recommended)</string>
+    <string name="strategy_shizuku_desc">Uses Shizuku to write ClientAppSettings.json into Roblox\'s private data dir. No root needed, survives Roblox updates.</string>
+    <string name="strategy_root">Root</string>
+    <string name="strategy_root_desc">Uses root to write directly to /data/data/com.roblox.client. Most reliable but requires a rooted device.</string>
+    <string name="strategy_virtual">Virtual space</string>
+    <string name="strategy_virtual_desc">Runs Roblox inside a parallel-space container that exposes its data dir to Chipstrap.</string>
+    <string name="strategy_local">Local profile (no-inject)</string>
+    <string name="strategy_local_desc">Cannot inject FFlags into the official Roblox app. Chipstrap will keep a local profile that can be exported/imported, and will only apply prefs that Roblox still honors (e.g. preferred app, haptics).</string>
+
+    <!-- FFlags -->
+    <string name="fflags_title">Fast Flags (FFlags)</string>
+    <string name="fflags_subtitle">Roblox disabled external FFlag reads on the Android client. Chipstrap uses a multi-strategy injector to keep them working.</string>
+    <string name="fflags_search">Search</string>
+    <string name="fflags_add">Add</string>
+    <string name="fflags_edit">Edit</string>
+    <string name="fflags_delete">Delete</string>
+    <string name="fflags_export">Export JSON</string>
+    <string name="fflags_import">Import JSON</string>
+    <string name="fflags_empty">No FFlags configured. Apply a preset or add your own.</string>
+    <string name="fflags_preset_applied">Preset applied: %1$s</string>
+    <string name="fflags_reset">Reset all to defaults</string>
+    <string name="fflags_backup">Backup</string>
+    <string name="fflags_restore">Restore</string>
+    <string name="menu_fastflags_section_presets">Presets</string>
+    <string name="fflags_key_hint">FFlag name (e.g. FIntRenderShadowIntensity)</string>
+    <string name="fflags_value_hint">Value</string>
+    <string name="fflags_warning_title">Use with caution</string>
+    <string name="fflags_warning_text">Misusing FFlags can cause instability. Avoid importing large lists from untrusted sources.</string>
+    <string name="fflags_acknowledge">I understand</string>
+
+    <!-- Presets -->
+    <string name="preset_ultra_fps">Ultra FPS</string>
+    <string name="preset_ultra_fps_desc">Maximum frame rate. Disables shadows, post-FX, lighting bakes; lowest textures; 1x MSAA.</string>
+    <string name="preset_balanced">Balanced</string>
+    <string name="preset_balanced_desc">Good visuals, smooth framerate. Vulkan, 2x MSAA, medium textures.</string>
+    <string name="preset_battery_saver">Battery Saver</string>
+    <string name="preset_battery_saver_desc">Caps FPS at 30, disables shadows, lowest textures, reduces draw distance.</string>
+    <string name="preset_high_quality">High Quality</string>
+    <string name="preset_high_quality_desc">Best visuals. Vulkan, 4x MSAA, high textures, full lighting.</string>
+    <string name="preset_low_end">Low-End Device</string>
+    <string name="preset_low_end_desc">For devices with &lt;= 3GB RAM. Strips bloat, minimal textures, disables ambient occlusion.</string>
+    <string name="preset_competitive">Competitive</string>
+    <string name="preset_competitive_desc">Forcibly uncap FPS, lowest input latency, disable bloom/DoF/shadows.</string>
+    <string name="preset_apply">Apply preset</string>
+
+    <!-- Rendering presets -->
+    <string name="rendering_mode">Rendering mode</string>
+    <string name="msaa_quality">Anti-aliasing quality (MSAA)</string>
+    <string name="texture_quality">Texture quality</string>
+    <string name="frame_rate_cap">Frame rate cap</string>
+    <string name="force_grey_sky">Force completely grey sky</string>
+    <string name="disable_shadows">Disable shadows</string>
+    <string name="disable_post_fx">Disable post-processing (bloom, DoF)</string>
+
+    <!-- Optimizations -->
+    <string name="opt_title">Optimizations</string>
+    <string name="opt_subtitle">Pre-tuned performance settings, applied on launch and reverted on exit.</string>
+    <string name="opt_cpu_governor">Force CPU performance governor</string>
+    <string name="opt_cpu_governor_desc">Sets scaling_governor to performance while Roblox is foreground (root only).</string>
+    <string name="opt_kill_bg">Kill background apps before launch</string>
+    <string name="opt_kill_bg_desc">Frees up RAM by stopping non-essential background apps.</string>
+    <string name="opt_clear_cache">Clear Roblox cache on launch</string>
+    <string name="opt_clear_cache_desc">Wipes Roblox temp/cache before each launch to prevent stutter from stale assets.</string>
+    <string name="opt_disable_doze">Disable Doze during gameplay</string>
+    <string name="opt_disable_doze_desc">Acquires a partial wakelock to prevent network throttling during long sessions.</string>
+    <string name="opt_gpu_tuning">GPU rendering tweak</string>
+    <string name="opt_gpu_tuning_desc">Forces hardware-accelerated rendering and disables HWUI overdraw checks.</string>
+    <string name="opt_bluetooth_audio">Boost Bluetooth audio buffer</string>
+    <string name="opt_bluetooth_audio_desc">Prevents BT audio dropouts during heavy scenes.</string>
+    <string name="opt_memory_trim">Memory trim on background</string>
+    <string name="opt_memory_trim_desc">Calls trimMemory aggressively when Roblox goes to background.</string>
+    <string name="opt_dns">Use low-latency DNS</string>
+    <string name="opt_dns_desc">Switches to Cloudflare (1.1.1.1) during gameplay for faster server lookups.</string>
+
+    <!-- Server info -->
+    <string name="server_title">Server information</string>
+    <string name="server_subtitle">Real-time info about the Roblox server you\'re connected to (BloxStrap-style).</string>
+    <string name="server_not_connected">Not in a Roblox session</string>
+    <string name="server_location">Location</string>
+    <string name="server_ping">Ping</string>
+    <string name="server_players">Players</string>
+    <string name="server_job_id">Job ID</string>
+    <string name="server_universe_id">Universe ID</string>
+    <string name="server_refresh">Refresh</string>
+
+    <!-- Activity tracker -->
+    <string name="activity_title">Activity tracker</string>
+    <string name="activity_total_time">Total time this session</string>
+    <string name="activity_last_experiences">Recent experiences</string>
+    <string name="activity_rejoin">Rejoin</string>
+
+    <!-- About -->
+    <string name="about_title">About Chipstrap</string>
+    <string name="about_version">Version %1$s (%2$d)</string>
+    <string name="about_description">Chipstrap is a native Android (Kotlin + Jetpack Compose) Roblox launcher, forked from the abandoned Chevstrap project. It restores FFlag management disabled by Roblox and adds BloxStrap-inspired server info, activity tracking and a battery of pre-tuned optimization presets.</string>
+    <string name="about_inspired_by">Inspired by BloxStrap (Windows) and Chevstrap (Android, discontinued).</string>
+    <string name="about_github">GitHub repository</string>
+    <string name="about_disclaimer_title">Disclaimer</string>
+    <string name="about_disclaimer">Chipstrap is not affiliated with Roblox Corporation. Use at your own risk. Modifying the Roblox client may violate Roblox\'s Terms of Service.</string>
+    <string name="about_license">MIT License</string>
+
+    <!-- Common -->
+    <string name="common_save">Save</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_ok">OK</string>
+    <string name="common_yes">Yes</string>
+    <string name="common_no">No</string>
+    <string name="common_apply">Apply</string>
+    <string name="common_close">Close</string>
+    <string name="common_loading">Loading…</string>
+    <string name="common_automatic">Automatic</string>
+    <string name="common_lowest">Lowest</string>
+    <string name="common_low">Low</string>
+    <string name="common_medium">Medium</string>
+    <string name="common_high">High</string>
+    <string name="common_error">Error</string>
+    <string name="common_success">Success</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_launcher">Launcher</string>
+    <string name="notif_channel_server">Server info</string>
+    <string name="notif_applying_changes">Applying changes to Roblox…</string>
+    <string name="notif_starting_roblox">Starting Roblox</string>
+    <string name="notif_connected_to_server">Connected to a server</string>
+    <string name="notif_server_location">Server location: %1$s</string>
+
+    <!-- Errors -->
+    <string name="err_failed_apply">Failed to apply changes to Roblox.\n\n%1$s</string>
+    <string name="err_failed_launch">Failed to launch Roblox.\n\n%1$s</string>
+    <string name="err_not_installed">Roblox is not installed.</string>
+    <string name="err_no_strategy">No FFlag injection strategy is available. Falling back to local profile only.</string>
+    <string name="err_shizuku_not_running">Shizuku is not running. Please start it.</string>
+    <string name="err_root_denied">Root access denied.</string>
+
+    <!-- Roblox app type -->
+    <string name="roblox_global">Global (com.roblox.client)</string>
+    <string name="roblox_vng">Vietnam (com.roblox.client.vnggames)</string>
+    <string name="roblox_custom">Custom package</string>
+    <string name="preferred_roblox_app">Preferred Roblox app</string>
+
+    <string name="rendering_opengl">OpenGL</string>
+    <string name="rendering_vulkan">Vulkan</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_system">System</string>
+</resources>
