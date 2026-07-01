@@ -26,39 +26,20 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Create ephemeral release keystore (self-contained)
+      - name: Build Debug APK (skip signing)
         run: |
-          # create keystore inside workspace (no secrets required)
-          rm -f app/release.keystore
-          mkdir -p app
-          keytool -genkeypair -v \
-            -keystore app/release.keystore \
-            -storetype JKS \
-            -storepass releasekeystorepass \
-            -keypass releasekeypass \
-            -alias chipstrap \
-            -keyalg RSA -keysize 2048 -validity 10000 \
-            -dname "CN=Chipstrap, OU=CI, O=Chipstrap, L=NA, ST=NA, C=US"
-          chmod 600 app/release.keystore
-
-      - name: Build Release APK (use generated keystore)
-        run: |
-          ./gradlew :app:assembleRelease --no-daemon --stacktrace \
-            -Pandroid.injected.signing.store.file=app/release.keystore \
-            -Pandroid.injected.signing.store.password=releasekeystorepass \
-            -Pandroid.injected.signing.key.alias=chipstrap \
-            -Pandroid.injected.signing.key.password=releasekeypass
+          ./gradlew :app:assembleDebug --no-daemon --stacktrace
 
       - name: Package artifact
         run: |
           mkdir -p artifacts
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          cp app/build/outputs/apk/release/app-release.apk artifacts/Chipstrap-release-${SHORT_SHA}.apk || true
+          cp app/build/outputs/apk/debug/app-debug.apk artifacts/Chipstrap-debug-${SHORT_SHA}.apk || true
           ls -la artifacts/
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Chipstrap-release
+          name: Chipstrap-debug
           path: artifacts/*.apk
           retention-days: 30
