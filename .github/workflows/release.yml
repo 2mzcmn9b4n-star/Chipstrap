@@ -26,13 +26,28 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Build Release APK (signed with debug keystore)
+      - name: Create ephemeral release keystore (self-contained)
+        run: |
+          # create keystore inside workspace (no secrets required)
+          rm -f app/release.keystore
+          mkdir -p app
+          keytool -genkeypair -v \
+            -keystore app/release.keystore \
+            -storetype JKS \
+            -storepass releasekeystorepass \
+            -keypass releasekeypass \
+            -alias chipstrap \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Chipstrap, OU=CI, O=Chipstrap, L=NA, ST=NA, C=US"
+          chmod 600 app/release.keystore
+
+      - name: Build Release APK (use generated keystore)
         run: |
           ./gradlew :app:assembleRelease --no-daemon --stacktrace \
-            -Pandroid.injected.signing.store.file="$HOME/.android/debug.keystore" \
-            -Pandroid.injected.signing.store.password=android \
-            -Pandroid.injected.signing.key.alias=androiddebugkey \
-            -Pandroid.injected.signing.key.password=android
+            -Pandroid.injected.signing.store.file=app/release.keystore \
+            -Pandroid.injected.signing.store.password=releasekeystorepass \
+            -Pandroid.injected.signing.key.alias=chipstrap \
+            -Pandroid.injected.signing.key.password=releasekeypass
 
       - name: Package artifact
         run: |
