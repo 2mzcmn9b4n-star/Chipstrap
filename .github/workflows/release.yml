@@ -36,22 +36,24 @@ jobs:
         env:
           KS_PASS: ${{ secrets.CHIPSTRAP_KS_PASS || 'chipstrap-default-keystore-password' }}
           KS_KEY_PASS: ${{ secrets.CHIPSTRAP_KS_KEY_PASS || 'chipstrap-default-key-password' }}
+          KS_BASE64: ${{ secrets.CHIPSTRAP_KS_BASE64 }}
         run: |
           set -e
-          if [ -n "${{ secrets.CHIPSTRAP_KS_BASE64 }}" ]; then
+          if [ -n "$KS_BASE64" ]; then
             echo "Using provided release keystore from secrets"
-            # Remove all whitespace and decode properly
-            echo "${{ secrets.CHIPSTRAP_KS_BASE64 }}" | tr -d '[:space:]' | base64 -d > app/release.keystore
+            # Remove ALL whitespace (spaces, newlines, tabs, etc) then decode
+            echo "$KS_BASE64" | tr -d ' \n\r\t' | base64 -d > app/release.keystore
             # Verify keystore file is valid
             if [ ! -s app/release.keystore ]; then
               echo "ERROR: Keystore file is empty after decoding"
               exit 1
             fi
-            # Verify it's a valid PKCS12 keystore
-            keytool -list -keystore app/release.keystore -storepass:env KS_PASS -storetype PKCS12 || {
-              echo "ERROR: Invalid keystore file"
+            # Test the keystore
+            keytool -list -keystore app/release.keystore -storepass:env KS_PASS -storetype PKCS12 > /dev/null || {
+              echo "ERROR: Invalid keystore - cannot list contents"
               exit 1
             }
+            echo "✓ Keystore decoded and validated successfully"
           else
             echo "Generating ephemeral self-signed release keystore"
             keytool -genkeypair -v \
