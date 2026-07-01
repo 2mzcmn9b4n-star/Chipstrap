@@ -23,23 +23,36 @@ jobs:
         with:
           packages: 'platform-tools platforms;android-35 build-tools;34.0.0'
 
+      - name: Generate release keystore
+        run: |
+          mkdir -p app
+          keytool -genkey -v -keystore app/release.keystore \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -alias release \
+            -dname "CN=Chipstrap,OU=Development,O=Chipstrap,L=City,ST=State,C=US" \
+            -storepass password123 -keypass password123
+
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Build Debug APK (skip signing)
+      - name: Build Release APK (with signing)
         run: |
-          ./gradlew :app:assembleDebug --no-daemon --stacktrace
+          ./gradlew :app:assembleRelease --no-daemon --stacktrace \
+            -Pandroid.injected.signing.store.file=$(pwd)/app/release.keystore \
+            -Pandroid.injected.signing.store.password=password123 \
+            -Pandroid.injected.signing.key.alias=release \
+            -Pandroid.injected.signing.key.password=password123
 
       - name: Package artifact
         run: |
           mkdir -p artifacts
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          cp app/build/outputs/apk/debug/app-debug.apk artifacts/Chipstrap-debug-${SHORT_SHA}.apk || true
+          cp app/build/outputs/apk/release/app-release.apk artifacts/Chipstrap-release-${SHORT_SHA}.apk || true
           ls -la artifacts/
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Chipstrap-debug
+          name: Chipstrap-release
           path: artifacts/*.apk
           retention-days: 30
