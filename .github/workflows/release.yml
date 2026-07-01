@@ -1,16 +1,10 @@
-name: Release
-
-# Auto-build and publish a Chipstrap APK release on every push to main.
-# A new GitHub release is created with the release APK attached.
-# Tag format: v<YYYYMMDD-HHMMSS>-<short-sha>
+name: Build APK and upload artifact
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 permissions:
-  contents: write   # required to create releases / push tags
+  contents: read
 
 jobs:
   build:
@@ -32,72 +26,24 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Generate ephemeral self-signed release keystore
-        env:
-          KS_PASS: ${{ secrets.CHIPSTRAP_KS_PASS || 'chipstrap-default-keystore-password' }}
-          KS_KEY_PASS: ${{ secrets.CHIPSTRAP_KS_KEY_PASS || 'chipstrap-default-key-password' }}
+      - name: Build Release APK (signed with debug keystore)
         run: |
-          keytool -genkeypair -v \
-            -keystore app/release.keystore \
-            -storetype PKCS12 \
-            -storepass:env KS_PASS \
-            -keypass:env KS_KEY_PASS \
-            -alias chipstrap \
-            -keyalg RSA -keysize 2048 -validity 10000 \
-            -dname "CN=Chipstrap, OU=Build, O=Chipstrap, L=NA, ST=NA, C=NA"
+          ./gradlew :app:assembleRelease --no-daemon --stacktrace \
+            -Pandroid.injected.signing.store.file="$HOME/.android/debug.keystore" \
+            -Pandroid.injected.signing.store.password=android \
+            -Pandroid.injected.signing.key.alias=androiddebugkey \
+            -Pandroid.injected.signing.key.password=android
 
-      - name: Build Release APK
-        env:
-          KS_PASS: ${{ secrets.CHIPSTRAP_KS_PASS || 'chipstrap-default-keystore-password' }}
-          KS_KEY_PASS: ${{ secrets.CHIPSTRAP_KS_KEY_PASS || 'chipstrap-default-key-password' }}
-        run: ./gradlew :app:assembleRelease --no-daemon --stacktrace
-
-      - name: Rename APK
+      - name: Package artifact
         run: |
           mkdir -p artifacts
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          cp app/build/outputs/apk/release/app-release.apk artifacts/Chipstrap-release-${SHORT_SHA}.apk
+          cp app/build/outputs/apk/release/app-release.apk artifacts/Chipstrap-release-${SHORT_SHA}.apk || true
           ls -la artifacts/
 
-      - name: Upload APK as artifact
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: Chipstrap-release
           path: artifacts/*.apk
           retention-days: 30
-
-      - name: Generate release tag
-        id: tag
-        run: |
-          TS=$(date -u +"%Y%m%d-%H%M%S")
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          echo "tag=v${TS}-${SHORT_SHA}" >> $GITHUB_OUTPUT
-          echo "name=Chipstrap build ${TS} (${SHORT_SHA})" >> $GITHUB_OUTPUT
-
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.tag.outputs.tag }}
-          name: ${{ steps.tag.outputs.name }}
-          body: |
-            # Chipstrap Release Build
-
-            **Commit:** ${{ github.sha }}
-            **Branch:** ${{ github.ref_name }}
-            **Built at:** ${{ steps.tag.outputs.tag }}
-
-            ## Downloads
-
-            - `Chipstrap-release-*.apk` — release build (self-signed)
-
-            ## Install
-
-            ```bash
-            adb install -r Chipstrap-release-*.apk
-            ```
-
-            See the [README](https://github.com/${{ github.repository }}/blob/main/README.md) for usage instructions.
-          files: |
-            artifacts/Chipstrap-release-*.apk
-          generate_release_notes: true
-          prerelease: false
