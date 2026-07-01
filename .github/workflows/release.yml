@@ -40,13 +40,18 @@ jobs:
           set -e
           if [ -n "${{ secrets.CHIPSTRAP_KS_BASE64 }}" ]; then
             echo "Using provided release keystore from secrets"
-            echo "${{ secrets.CHIPSTRAP_KS_BASE64 }}" | base64 -d -w 0 > app/release.keystore
+            # Remove all whitespace and decode properly
+            echo "${{ secrets.CHIPSTRAP_KS_BASE64 }}" | tr -d '[:space:]' | base64 -d > app/release.keystore
             # Verify keystore file is valid
             if [ ! -s app/release.keystore ]; then
               echo "ERROR: Keystore file is empty after decoding"
               exit 1
             fi
-            file app/release.keystore
+            # Verify it's a valid PKCS12 keystore
+            keytool -list -keystore app/release.keystore -storepass:env KS_PASS -storetype PKCS12 || {
+              echo "ERROR: Invalid keystore file"
+              exit 1
+            }
           else
             echo "Generating ephemeral self-signed release keystore"
             keytool -genkeypair -v \
